@@ -2,6 +2,7 @@ package com.manuel.forum.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	@Lob
@@ -34,15 +35,19 @@ public class User implements Serializable {
 	@Column(name="num_topics")
 	private int numTopics;
 
+	@Lob
 	private String password;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name="registration_date")
 	private Date registrationDate;
+	
+	private String role;
 
 	private String status;
 
 	private String username;
+	
 
 	//bi-directional many-to-one association to Comment
 	@OneToMany(mappedBy="user")
@@ -118,6 +123,7 @@ public class User implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
 
 	public Date getRegistrationDate() {
 		return this.registrationDate;
@@ -125,6 +131,14 @@ public class User implements Serializable {
 
 	public void setRegistrationDate(Date registrationDate) {
 		this.registrationDate = registrationDate;
+	}
+	
+	public String getRole() {
+		return this.role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	public String getStatus() {
