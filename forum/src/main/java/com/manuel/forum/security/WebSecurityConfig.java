@@ -2,9 +2,8 @@ package com.manuel.forum.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,31 +16,14 @@ import com.manuel.forum.service.UserDetailsImpl;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Override
-	// defines which URL paths should be secured and which should not
-	protected void configure(HttpSecurity http) throws Exception {
-		http.
-				csrf().disable()
-				.authorizeRequests()
-					.antMatchers("/hello").permitAll()
-					.antMatchers(HttpMethod.POST, "/sign-up").permitAll()
-					.antMatchers(HttpMethod.POST, "/sign-in").permitAll()
-//			.antMatchers("/test").fullyAuthenticated().anyRequest().authenticated()
-					.antMatchers("/test").access("hasRole('user')")
-					.and()
-				.formLogin()
-//			.loginPage("/login") //Suppress this to bring up the default form
-					.permitAll()
-					.and()
-				.logout()
-//			.logoutSuccessUrl("/login?logout")
-					.permitAll();
+	@Bean
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
 	}
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		PasswordEncoder encoder = new BCryptPasswordEncoder();
-		return encoder;
+		return new BCryptPasswordEncoder();
 	}
 
 	@Bean
